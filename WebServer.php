@@ -11,10 +11,10 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman;
+namespace brebvix;
 
-use Workerman\Protocols\Http;
-use Workerman\Protocols\HttpCache;
+use brebvix\Protocols\Http;
+use brebvix\Protocols\HttpCache;
 
 /**
  *  WebServer.

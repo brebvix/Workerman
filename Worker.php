@@ -11,15 +11,15 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman;
+namespace brebvix;
 require_once __DIR__ . '/Lib/Constants.php';
 
-use Workerman\Events\EventInterface;
-use Workerman\Connection\ConnectionInterface;
-use Workerman\Connection\TcpConnection;
-use Workerman\Connection\UdpConnection;
-use Workerman\Lib\Timer;
-use Workerman\Events\Select;
+use brebvix\Events\EventInterface;
+use brebvix\Connection\ConnectionInterface;
+use brebvix\Connection\TcpConnection;
+use brebvix\Connection\UdpConnection;
+use brebvix\Lib\Timer;
+use brebvix\Events\Select;
 use Exception;
 
 /**
@@ -452,10 +452,10 @@ class Worker
      * @var array
      */
     protected static $_availableEventLoops = array(
-        'libevent' => '\Workerman\Events\Libevent',
-        'event'    => '\Workerman\Events\Event'
+        'libevent' => '\brebvix\Events\Libevent',
+        'event'    => '\brebvix\Events\Event'
         // Temporarily removed swoole because it is not stable enough  
-        //'swoole'   => '\Workerman\Events\Swoole'
+        //'swoole'   => '\brebvix\Events\Swoole'
     );
 
     /**
@@ -1020,17 +1020,17 @@ class Worker
             return;
         }
         // stop
-        pcntl_signal(SIGINT, array('\Workerman\Worker', 'signalHandler'), false);
+        pcntl_signal(SIGINT, array('\brebvix\Worker', 'signalHandler'), false);
         // graceful stop
-        pcntl_signal(SIGTERM, array('\Workerman\Worker', 'signalHandler'), false);
+        pcntl_signal(SIGTERM, array('\brebvix\Worker', 'signalHandler'), false);
         // reload
-        pcntl_signal(SIGUSR1, array('\Workerman\Worker', 'signalHandler'), false);
+        pcntl_signal(SIGUSR1, array('\brebvix\Worker', 'signalHandler'), false);
         // graceful reload
-        pcntl_signal(SIGQUIT, array('\Workerman\Worker', 'signalHandler'), false);
+        pcntl_signal(SIGQUIT, array('\brebvix\Worker', 'signalHandler'), false);
         // status
-        pcntl_signal(SIGUSR2, array('\Workerman\Worker', 'signalHandler'), false);
+        pcntl_signal(SIGUSR2, array('\brebvix\Worker', 'signalHandler'), false);
         // connection status
-        pcntl_signal(SIGIO, array('\Workerman\Worker', 'signalHandler'), false);
+        pcntl_signal(SIGIO, array('\brebvix\Worker', 'signalHandler'), false);
         // ignore
         pcntl_signal(SIGPIPE, SIG_IGN, false);
     }
@@ -1056,17 +1056,17 @@ class Worker
         // uninstall status signal handler
         pcntl_signal(SIGUSR2, SIG_IGN, false);
         // reinstall stop signal handler
-        static::$globalEvent->add(SIGINT, EventInterface::EV_SIGNAL, array('\Workerman\Worker', 'signalHandler'));
+        static::$globalEvent->add(SIGINT, EventInterface::EV_SIGNAL, array('\brebvix\Worker', 'signalHandler'));
         // reinstall graceful stop signal handler
-        static::$globalEvent->add(SIGTERM, EventInterface::EV_SIGNAL, array('\Workerman\Worker', 'signalHandler'));
+        static::$globalEvent->add(SIGTERM, EventInterface::EV_SIGNAL, array('\brebvix\Worker', 'signalHandler'));
         // reinstall reload signal handler
-        static::$globalEvent->add(SIGUSR1, EventInterface::EV_SIGNAL, array('\Workerman\Worker', 'signalHandler'));
+        static::$globalEvent->add(SIGUSR1, EventInterface::EV_SIGNAL, array('\brebvix\Worker', 'signalHandler'));
         // reinstall graceful reload signal handler
-        static::$globalEvent->add(SIGQUIT, EventInterface::EV_SIGNAL, array('\Workerman\Worker', 'signalHandler'));
+        static::$globalEvent->add(SIGQUIT, EventInterface::EV_SIGNAL, array('\brebvix\Worker', 'signalHandler'));
         // reinstall status signal handler
-        static::$globalEvent->add(SIGUSR2, EventInterface::EV_SIGNAL, array('\Workerman\Worker', 'signalHandler'));
+        static::$globalEvent->add(SIGUSR2, EventInterface::EV_SIGNAL, array('\brebvix\Worker', 'signalHandler'));
         // reinstall connection status signal handler
-        static::$globalEvent->add(SIGIO, EventInterface::EV_SIGNAL, array('\Workerman\Worker', 'signalHandler'));
+        static::$globalEvent->add(SIGIO, EventInterface::EV_SIGNAL, array('\brebvix\Worker', 'signalHandler'));
     }
 
     /**
@@ -1211,20 +1211,20 @@ class Worker
             if (interface_exists('\React\EventLoop\LoopInterface')) {
                 switch ($loop_name) {
                     case 'libevent':
-                        static::$eventLoopClass = '\Workerman\Events\React\ExtLibEventLoop';
+                        static::$eventLoopClass = '\brebvix\Events\React\ExtLibEventLoop';
                         break;
                     case 'event':
-                        static::$eventLoopClass = '\Workerman\Events\React\ExtEventLoop';
+                        static::$eventLoopClass = '\brebvix\Events\React\ExtEventLoop';
                         break;
                     default :
-                        static::$eventLoopClass = '\Workerman\Events\React\StreamSelectLoop';
+                        static::$eventLoopClass = '\brebvix\Events\React\StreamSelectLoop';
                         break;
                 }
             } else {
                 static::$eventLoopClass = static::$_availableEventLoops[$loop_name];
             }
         } else {
-            static::$eventLoopClass = interface_exists('\React\EventLoop\LoopInterface')? '\Workerman\Events\React\StreamSelectLoop':'\Workerman\Events\Select';
+            static::$eventLoopClass = interface_exists('\React\EventLoop\LoopInterface')? '\brebvix\Events\React\StreamSelectLoop':'\brebvix\Events\Select';
         }
         return static::$eventLoopClass;
     }
@@ -1317,7 +1317,7 @@ class Worker
         }
         else
         {
-            static::$globalEvent = new \Workerman\Events\Select();
+            static::$globalEvent = new \brebvix\Events\Select();
             Timer::init(static::$globalEvent);
             foreach($files as $start_file)
             {
@@ -1412,7 +1412,7 @@ class Worker
     /**
      * Fork one worker process.
      *
-     * @param \Workerman\Worker $worker
+     * @param \brebvix\Worker $worker
      * @throws Exception
      */
     protected static function forkOneWorkerForLinux($worker)
@@ -1606,7 +1606,7 @@ class Worker
      */
     protected static function monitorWorkersForWindows()
     {
-        Timer::add(1, "\\Workerman\\Worker::checkWorkerStatusForWindows");
+        Timer::add(1, "\\brebvix\\Worker::checkWorkerStatusForWindows");
 
         static::$globalEvent->loop();
     }
@@ -1748,7 +1748,7 @@ class Worker
                     Timer::add(static::KILL_WORKER_TIMER_TIME, 'posix_kill', array($worker_pid, SIGKILL), false);
                 }
             }
-            Timer::add(1, "\\Workerman\\Worker::checkIfChildRunning");
+            Timer::add(1, "\\brebvix\\Worker::checkIfChildRunning");
             // Remove statistics file.
             if (is_file(static::$_statisticsFile)) {
                 @unlink(static::$_statisticsFile);
@@ -1873,7 +1873,7 @@ class Worker
 
         // For child processes.
         reset(static::$_workers);
-        /** @var \Workerman\Worker $worker */
+        /** @var \brebvix\Worker $worker */
         $worker            = current(static::$_workers);
         $worker_status_str = posix_getpid() . "\t" . str_pad(round(memory_get_usage(true) / (1024 * 1024), 2) . "M", 7)
             . " " . str_pad($worker->getSocketName(), static::$_maxSocketNameLength) . " "
@@ -1928,9 +1928,9 @@ class Worker
         $current_worker = current(static::$_workers);
         $default_worker_name = $current_worker->name;
 
-        /** @var \Workerman\Worker $worker */
+        /** @var \brebvix\Worker $worker */
         foreach(TcpConnection::$connections as $connection) {
-            /** @var \Workerman\Connection\TcpConnection $connection */
+            /** @var \brebvix\Connection\TcpConnection $connection */
             $transport      = $connection->transport;
             $ipv4           = $connection->isIpV4() ? ' 1' : ' 0';
             $ipv6           = $connection->isIpV6() ? ' 1' : ' 0';
@@ -2150,7 +2150,7 @@ class Worker
                 $scheme         = ucfirst($scheme);
                 $this->protocol = substr($scheme,0,1)==='\\' ? $scheme : '\\Protocols\\' . $scheme;
                 if (!class_exists($this->protocol)) {
-                    $this->protocol = "\\Workerman\\Protocols\\$scheme";
+                    $this->protocol = "\\brebvix\\Protocols\\$scheme";
                     if (!class_exists($this->protocol)) {
                         throw new Exception("class \\Protocols\\$scheme not exist");
                     }
@@ -2275,7 +2275,7 @@ class Worker
         static::$_status = static::STATUS_RUNNING;
 
         // Register shutdown function for checking errors.
-        register_shutdown_function(array("\\Workerman\\Worker", 'checkErrors'));
+        register_shutdown_function(array("\\brebvix\\Worker", 'checkErrors'));
 
         // Set autoload root path.
         Autoloader::setRootPath($this->_autoloadRootPath);
@@ -2416,7 +2416,7 @@ class Worker
         if ($this->onMessage) {
             try {
                 if ($this->protocol !== null) {
-                    /** @var \Workerman\Protocols\ProtocolInterface $parser */
+                    /** @var \brebvix\Protocols\ProtocolInterface $parser */
                     $parser      = $this->protocol;
                     if(method_exists($parser,'input')){
                         while($recv_buffer !== ''){

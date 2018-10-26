@@ -11,10 +11,10 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Connection;
+namespace brebvix\Connection;
 
-use Workerman\Events\EventInterface;
-use Workerman\Worker;
+use brebvix\Events\EventInterface;
+use brebvix\Worker;
 use Exception;
 
 /**
@@ -65,7 +65,7 @@ class AsyncUdpConnection extends UdpConnection
             $scheme         = ucfirst($scheme);
             $this->protocol = '\\Protocols\\' . $scheme;
             if (!class_exists($this->protocol)) {
-                $this->protocol = "\\Workerman\\Protocols\\$scheme";
+                $this->protocol = "\\brebvix\\Protocols\\$scheme";
                 if (!class_exists($this->protocol)) {
                     throw new Exception("class \\Protocols\\$scheme not exist");
                 }

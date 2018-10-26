@@ -11,7 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman;
+namespace brebvix;
 
 /**
  * Autoload.
@@ -45,7 +45,7 @@ class Autoloader
     public static function loadByNamespace($name)
     {
         $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $name);
-        if (strpos($name, 'Workerman\\') === 0) {
+        if (strpos($name, 'brebvix\\') === 0) {
             $class_file = __DIR__ . substr($class_path, strlen('Workerman')) . '.php';
         } else {
             if (self::$_autoloadRootPath) {
@@ -66,4 +66,4 @@ class Autoloader
     }
 }
 
-spl_autoload_register('\Workerman\Autoloader::loadByNamespace');
+spl_autoload_register('\brebvix\Autoloader::loadByNamespace');

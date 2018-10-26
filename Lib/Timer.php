@@ -11,17 +11,17 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Lib;
+namespace brebvix\Lib;
 
-use Workerman\Events\EventInterface;
-use Workerman\Worker;
+use brebvix\Events\EventInterface;
+use brebvix\Worker;
 use Exception;
 
 /**
  * Timer.
  *
  * example:
- * Workerman\Lib\Timer::add($time_interval, callback, array($arg1, $arg2..));
+ * brebvix\Lib\Timer::add($time_interval, callback, array($arg1, $arg2..));
  */
 class Timer
 {
@@ -40,14 +40,14 @@ class Timer
     /**
      * event
      *
-     * @var \Workerman\Events\EventInterface
+     * @var \brebvix\Events\EventInterface
      */
     protected static $_event = null;
 
     /**
      * Init.
      *
-     * @param \Workerman\Events\EventInterface $event
+     * @param \brebvix\Events\EventInterface $event
      * @return void
      */
     public static function init($event = null)
@@ -56,7 +56,7 @@ class Timer
             self::$_event = $event;
         } else {
             if (function_exists('pcntl_signal')) {
-                pcntl_signal(SIGALRM, array('\Workerman\Lib\Timer', 'signalHandle'), false);
+                pcntl_signal(SIGALRM, array('\brebvix\Lib\Timer', 'signalHandle'), false);
             }
         }
     }

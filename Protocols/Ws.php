@@ -11,11 +11,11 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Protocols;
+namespace brebvix\Protocols;
 
-use Workerman\Worker;
-use Workerman\Lib\Timer;
-use Workerman\Connection\TcpConnection;
+use brebvix\Worker;
+use brebvix\Lib\Timer;
+use brebvix\Connection\TcpConnection;
 
 /**
  * Websocket protocol for client.
@@ -353,7 +353,7 @@ class Ws
     /**
      * Send websocket handshake.
      *
-     * @param \Workerman\Connection\TcpConnection $connection
+     * @param \brebvix\Connection\TcpConnection $connection
      * @return void
      */
     public static function sendHandshake($connection)
@@ -398,7 +398,7 @@ class Ws
      * Websocket handshake.
      *
      * @param string                              $buffer
-     * @param \Workerman\Connection\TcpConnection $connection
+     * @param \brebvix\Connection\TcpConnection $connection
      * @return int
      */
     public static function dealHandshake($buffer, $connection)

@@ -11,7 +11,7 @@
  * @link      https://github.com/ares333/Workerman
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Events;
+namespace brebvix\Events;
 
 use Swoole\Event;
 use Swoole\Timer;
@@ -34,7 +34,7 @@ class Swoole implements EventInterface
      *
      * {@inheritdoc}
      *
-     * @see \Workerman\Events\EventInterface::add()
+     * @see \brebvix\Events\EventInterface::add()
      */
     public function add($fd, $flag, $func, $args = null)
     {
@@ -115,7 +115,7 @@ class Swoole implements EventInterface
      *
      * {@inheritdoc}
      *
-     * @see \Workerman\Events\EventInterface::del()
+     * @see \brebvix\Events\EventInterface::del()
      */
     public function del($fd, $flag)
     {
@@ -170,7 +170,7 @@ class Swoole implements EventInterface
      *
      * {@inheritdoc}
      *
-     * @see \Workerman\Events\EventInterface::clearAllTimer()
+     * @see \brebvix\Events\EventInterface::clearAllTimer()
      */
     public function clearAllTimer()
     {
@@ -185,7 +185,7 @@ class Swoole implements EventInterface
      *
      * {@inheritdoc}
      *
-     * @see \Workerman\Events\EventInterface::loop()
+     * @see \brebvix\Events\EventInterface::loop()
      */
     public function loop()
     {
@@ -196,7 +196,7 @@ class Swoole implements EventInterface
      *
      * {@inheritdoc}
      *
-     * @see \Workerman\Events\EventInterface::destroy()
+     * @see \brebvix\Events\EventInterface::destroy()
      */
     public function destroy()
     {
@@ -207,7 +207,7 @@ class Swoole implements EventInterface
      *
      * {@inheritdoc}
      *
-     * @see \Workerman\Events\EventInterface::getTimerCount()
+     * @see \brebvix\Events\EventInterface::getTimerCount()
      */
     public function getTimerCount()
     {

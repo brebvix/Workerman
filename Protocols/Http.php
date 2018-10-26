@@ -11,10 +11,10 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Protocols;
+namespace brebvix\Protocols;
 
-use Workerman\Connection\TcpConnection;
-use Workerman\Worker;
+use brebvix\Connection\TcpConnection;
+use brebvix\Worker;
 
 /**
  * http protocol
@@ -161,8 +161,8 @@ class Http
                     break;
                 case 'UPGRADE':
 					if($value=='websocket'){
-						$connection->protocol = "\\Workerman\\Protocols\\Websocket";
-						return \Workerman\Protocols\Websocket::input($recv_buffer,$connection);
+						$connection->protocol = "\\brebvix\\Protocols\\Websocket";
+						return \brebvix\Protocols\Websocket::input($recv_buffer,$connection);
 					}
                     break;
             }

@@ -11,13 +11,13 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Events\React;
-use Workerman\Events\EventInterface;
+namespace brebvix\Events\React;
+use brebvix\Events\EventInterface;
 use React\EventLoop\TimerInterface;
 
 /**
  * Class StreamSelectLoop
- * @package Workerman\Events\React
+ * @package brebvix\Events\React
  */
 class Base implements \React\EventLoop\LoopInterface
 {

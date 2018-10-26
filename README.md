@@ -20,7 +20,7 @@ composer require workerman/workerman
 ```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 // Create a Websocket server
 $ws_worker = new Worker("websocket://0.0.0.0:2346");
@@ -54,7 +54,7 @@ Worker::runAll();
 ### An http server
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 // #### http worker ####
 $http_worker = new Worker("http://0.0.0.0:2345");
@@ -78,8 +78,8 @@ Worker::runAll();
 ### A WebServer
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\WebServer;
-use Workerman\Worker;
+use brebvix\WebServer;
+use brebvix\Worker;
 
 // WebServer
 $web = new WebServer("http://0.0.0.0:80");
@@ -97,7 +97,7 @@ Worker::runAll();
 ### A tcp server
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 // #### create socket and listen 1234 port ####
 $tcp_worker = new Worker("tcp://0.0.0.0:1234");
@@ -131,7 +131,7 @@ Worker::runAll();
 ```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 // SSL context.
 $context = array(
@@ -195,7 +195,7 @@ class MyTextProtocol
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 // #### MyTextProtocol worker ####
 $text_worker = new Worker("MyTextProtocol://0.0.0.0:5678");
@@ -223,8 +223,8 @@ Worker::runAll();
 ### Timer
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
-use Workerman\Lib\Timer;
+use brebvix\Worker;
+use brebvix\Lib\Timer;
 
 $task = new Worker();
 $task->onWorkerStart = function($task)
@@ -246,8 +246,8 @@ Worker::runAll();
 ### AsyncTcpConnection (tcp/ws/text/frame etc...)
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
-use Workerman\Connection\AsyncTcpConnection;
+use brebvix\Worker;
+use brebvix\Connection\AsyncTcpConnection;
 
 $worker = new Worker();
 $worker->onWorkerStart = function()
@@ -279,7 +279,7 @@ composer require react/mysql
 ```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 $worker = new Worker('tcp://0.0.0.0:6161');
 $worker->onWorkerStart = function() {
@@ -327,7 +327,7 @@ composer require clue/redis-react
 require_once __DIR__ . '/vendor/autoload.php';
 use Clue\React\Redis\Factory;
 use Clue\React\Redis\Client;
-use Workerman\Worker;
+use brebvix\Worker;
 
 $worker = new Worker('tcp://0.0.0.0:6161');
 
@@ -366,7 +366,7 @@ composer require react/dns
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 $worker = new Worker('tcp://0.0.0.0:6161');
 $worker->onWorkerStart = function() {
     global   $dns;
@@ -396,7 +396,7 @@ composer require react/http-client
 ```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 $worker = new Worker('tcp://0.0.0.0:6161');
 
@@ -426,7 +426,7 @@ composer require react/zmq
 ```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 $worker = new Worker('text://0.0.0.0:6161');
 
@@ -457,7 +457,7 @@ composer require react/stomp
 ```php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use Workerman\Worker;
+use brebvix\Worker;
 
 $worker = new Worker('text://0.0.0.0:6161');
 
@@ -512,12 +512,12 @@ PHP:      5.5.9
 **Codes**
 ```php
 <?php
-use Workerman\Worker;
+use brebvix\Worker;
 $worker = new Worker('tcp://0.0.0.0:1234');
 $worker->count=3;
 $worker->onMessage = function($connection, $data)
 {
-    $connection->send("HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nServer: workerman\r\nContent-Length: 5\r\n\r\nhello");
+    $connection->send("HTTP/1.1 200 OK\r\nConnection: keep-alive\r\nServer: brebvix\r\nContent-Length: 5\r\n\r\nhello");
 };
 Worker::runAll();
 ```

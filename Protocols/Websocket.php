@@ -11,16 +11,16 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Protocols;
+namespace brebvix\Protocols;
 
-use Workerman\Connection\ConnectionInterface;
-use Workerman\Connection\TcpConnection;
-use Workerman\Worker;
+use brebvix\Connection\ConnectionInterface;
+use brebvix\Connection\TcpConnection;
+use brebvix\Worker;
 
 /**
  * WebSocket protocol.
  */
-class Websocket implements \Workerman\Protocols\ProtocolInterface
+class Websocket implements \brebvix\Protocols\ProtocolInterface
 {
     /**
      * Websocket blob type.
@@ -337,7 +337,7 @@ class Websocket implements \Workerman\Protocols\ProtocolInterface
      * Websocket handshake.
      *
      * @param string                              $buffer
-     * @param \Workerman\Connection\TcpConnection $connection
+     * @param \brebvix\Connection\TcpConnection $connection
      * @return int
      */
     protected static function dealHandshake($buffer, $connection)
