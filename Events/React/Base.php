@@ -11,9 +11,12 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Events\React;
+
 use brebvix\Events\EventInterface;
 use React\EventLoop\TimerInterface;
+use React\EventLoop\LoopInterface;
 
 /**
  * Class StreamSelectLoop
@@ -73,15 +76,15 @@ class Base implements \React\EventLoop\LoopInterface
                 $this->_signalHandlerMap[$fd] = $func;
                 return $this->addSignal($fd, $func);
             case EventInterface::EV_TIMER:
-                $timer_obj = $this->addPeriodicTimer($fd, function() use ($func, $args) {
+                $timer_obj = $this->addPeriodicTimer($fd, function () use ($func, $args) {
                     call_user_func_array($func, $args);
                 });
                 $this->_timerIdMap[++$this->_timerIdIndex] = $timer_obj;
                 return $this->_timerIdIndex;
             case EventInterface::EV_TIMER_ONCE:
                 $index = ++$this->_timerIdIndex;
-                $timer_obj = $this->addTimer($fd, function() use ($func, $args, $index) {
-                    $this->del($index,EventInterface::EV_TIMER_ONCE);
+                $timer_obj = $this->addTimer($fd, function () use ($func, $args, $index) {
+                    $this->del($index, EventInterface::EV_TIMER_ONCE);
                     call_user_func_array($func, $args);
                 });
                 $this->_timerIdMap[$index] = $timer_obj;
@@ -94,7 +97,7 @@ class Base implements \React\EventLoop\LoopInterface
      * Remove event listener from event loop.
      *
      * @param mixed $fd
-     * @param int   $flag
+     * @param int $flag
      * @return bool
      */
     public function del($fd, $flag)
@@ -114,7 +117,7 @@ class Base implements \React\EventLoop\LoopInterface
 
             case EventInterface::EV_TIMER:
             case EventInterface::EV_TIMER_ONCE:
-                if (isset($this->_timerIdMap[$fd])){
+                if (isset($this->_timerIdMap[$fd])) {
                     $timer_obj = $this->_timerIdMap[$fd];
                     unset($this->_timerIdMap[$fd]);
                     $this->cancelTimer($timer_obj);
@@ -213,7 +216,7 @@ class Base implements \React\EventLoop\LoopInterface
     /**
      * @param TimerInterface $timer
      */
-    public function cancelTimer(TimerInterface $timer)
+    public function cancelTimer($timer)
     {
         return $this->_eventLoop->cancelTimer($timer);
     }
@@ -232,7 +235,7 @@ class Base implements \React\EventLoop\LoopInterface
      */
     public function addSignal($signal, $listener)
     {
-        return $this->_eventLoop->addSignal($signal, $listener);
+        return true;
     }
 
     /**
@@ -258,5 +261,25 @@ class Base implements \React\EventLoop\LoopInterface
     public function stop()
     {
         return $this->_eventLoop->stop();
+    }
+
+    public function removeStream($stream)
+    {
+        // TODO: Implement removeStream() method.
+    }
+
+    public function nextTick(callable $listener)
+    {
+        // TODO: Implement nextTick() method.
+    }
+
+    public function tick()
+    {
+        // TODO: Implement tick() method.
+    }
+
+    public function isTimerActive(\React\EventLoop\Timer\TimerInterface $timer)
+    {
+        // TODO: Implement isTimerActive() method.
     }
 }

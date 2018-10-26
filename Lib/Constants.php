@@ -36,8 +36,7 @@ define('OS_TYPE_LINUX', 'linux');
 define('OS_TYPE_WINDOWS', 'windows');
 
 // Compatible with php7
-if(!class_exists('Error'))
-{
+if (!class_exists('Error')) {
     class Error extends Exception
     {
     }

@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Protocols;
 
 use brebvix\Connection\TcpConnection;
@@ -22,15 +23,15 @@ use brebvix\Worker;
 class Http
 {
     /**
-      * The supported HTTP methods
-      * @var array
-      */
+     * The supported HTTP methods
+     * @var array
+     */
     public static $methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS');
 
     /**
      * Check the integrity of the package.
      *
-     * @param string        $recv_buffer
+     * @param string $recv_buffer
      * @param TcpConnection $connection
      * @return int
      */
@@ -48,24 +49,24 @@ class Http
         list($header,) = explode("\r\n\r\n", $recv_buffer, 2);
         $method = substr($header, 0, strpos($header, ' '));
 
-        if(in_array($method, static::$methods)) {
+        if (in_array($method, static::$methods)) {
             return static::getRequestSize($header, $method);
-        }else{
+        } else {
             $connection->send("HTTP/1.1 400 Bad Request\r\n\r\n", true);
             return 0;
         }
     }
 
     /**
-      * Get whole size of the request
-      * includes the request headers and request body.
-      * @param string $header The request headers
-      * @param string $method The request method
-      * @return integer
-      */
+     * Get whole size of the request
+     * includes the request headers and request body.
+     * @param string $header The request headers
+     * @param string $method The request method
+     * @return integer
+     */
     protected static function getRequestSize($header, $method)
     {
-        if($method === 'GET' || $method === 'OPTIONS' || $method === 'HEAD') {
+        if ($method === 'GET' || $method === 'OPTIONS' || $method === 'HEAD') {
             return strlen($header) + 4;
         }
         $match = array();
@@ -79,37 +80,37 @@ class Http
     /**
      * Parse $_POST、$_GET、$_COOKIE.
      *
-     * @param string        $recv_buffer
+     * @param string $recv_buffer
      * @param TcpConnection $connection
      * @return array
      */
     public static function decode($recv_buffer, TcpConnection $connection)
     {
         // Init.
-        $_POST                         = $_GET = $_COOKIE = $_REQUEST = $_SESSION = $_FILES = array();
+        $_POST = $_GET = $_COOKIE = $_REQUEST = $_SESSION = $_FILES = array();
         $GLOBALS['HTTP_RAW_POST_DATA'] = '';
         // Clear cache.
-        HttpCache::$header   = array('Connection' => 'Connection: keep-alive');
+        HttpCache::$header = array('Connection' => 'Connection: keep-alive');
         HttpCache::$instance = new HttpCache();
         // $_SERVER
         $_SERVER = array(
-            'QUERY_STRING'         => '',
-            'REQUEST_METHOD'       => '',
-            'REQUEST_URI'          => '',
-            'SERVER_PROTOCOL'      => '',
-            'SERVER_SOFTWARE'      => 'workerman/'.Worker::VERSION,
-            'SERVER_NAME'          => '',
-            'HTTP_HOST'            => '',
-            'HTTP_USER_AGENT'      => '',
-            'HTTP_ACCEPT'          => '',
+            'QUERY_STRING' => '',
+            'REQUEST_METHOD' => '',
+            'REQUEST_URI' => '',
+            'SERVER_PROTOCOL' => '',
+            'SERVER_SOFTWARE' => 'workerman/' . Worker::VERSION,
+            'SERVER_NAME' => '',
+            'HTTP_HOST' => '',
+            'HTTP_USER_AGENT' => '',
+            'HTTP_ACCEPT' => '',
             'HTTP_ACCEPT_LANGUAGE' => '',
             'HTTP_ACCEPT_ENCODING' => '',
-            'HTTP_COOKIE'          => '',
-            'HTTP_CONNECTION'      => '',
-            'CONTENT_TYPE'         => '',
-            'REMOTE_ADDR'          => '',
-            'REMOTE_PORT'          => '0',
-            'REQUEST_TIME'         => time()
+            'HTTP_COOKIE' => '',
+            'HTTP_CONNECTION' => '',
+            'CONTENT_TYPE' => '',
+            'REMOTE_ADDR' => '',
+            'REMOTE_PORT' => '0',
+            'REQUEST_TIME' => time()
         );
 
         // Parse headers.
@@ -126,14 +127,14 @@ class Http
             if (empty($content)) {
                 continue;
             }
-            list($key, $value)       = explode(':', $content, 2);
-            $key                     = str_replace('-', '_', strtoupper($key));
-            $value                   = trim($value);
+            list($key, $value) = explode(':', $content, 2);
+            $key = str_replace('-', '_', strtoupper($key));
+            $value = trim($value);
             $_SERVER['HTTP_' . $key] = $value;
             switch ($key) {
                 // HTTP_HOST
                 case 'HOST':
-                    $tmp                    = explode(':', $value);
+                    $tmp = explode(':', $value);
                     $_SERVER['SERVER_NAME'] = $tmp[0];
                     if (isset($tmp[1])) {
                         $_SERVER['SERVER_PORT'] = $tmp[1];
@@ -153,23 +154,23 @@ class Http
                         }
                     } else {
                         $_SERVER['CONTENT_TYPE'] = 'multipart/form-data';
-                        $http_post_boundary      = '--' . $match[1];
+                        $http_post_boundary = '--' . $match[1];
                     }
                     break;
                 case 'CONTENT_LENGTH':
                     $_SERVER['CONTENT_LENGTH'] = $value;
                     break;
                 case 'UPGRADE':
-					if($value=='websocket'){
-						$connection->protocol = "\\brebvix\\Protocols\\Websocket";
-						return \brebvix\Protocols\Websocket::input($recv_buffer,$connection);
-					}
+                    if ($value == 'websocket') {
+                        $connection->protocol = "\\brebvix\\Protocols\\Websocket";
+                        return \brebvix\Protocols\Websocket::input($recv_buffer, $connection);
+                    }
                     break;
             }
         }
-		if(isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE){
-			HttpCache::$gzip = true;
-		}
+        if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE) {
+            HttpCache::$gzip = true;
+        }
         // Parse $_POST.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_SERVER['CONTENT_TYPE'])) {
@@ -228,7 +229,7 @@ class Http
     /**
      * Http encode.
      *
-     * @param string        $content
+     * @param string $content
      * @param TcpConnection $connection
      * @return string
      */
@@ -257,10 +258,10 @@ class Http
                 $header .= $item . "\r\n";
             }
         }
-		if(HttpCache::$gzip && isset($connection->gzip) && $connection->gzip){
-			$header .= "Content-Encoding: gzip\r\n";
-			$content = gzencode($content,$connection->gzip);
-		}
+        if (HttpCache::$gzip && isset($connection->gzip) && $connection->gzip) {
+            $header .= "Content-Encoding: gzip\r\n";
+            $content = gzencode($content, $connection->gzip);
+        }
         // header
         $header .= "Server: workerman/" . Worker::VERSION . "\r\nContent-Length: " . strlen($content) . "\r\n\r\n";
 
@@ -328,13 +329,13 @@ class Http
     /**
      * Set cookie.
      *
-     * @param string  $name
-     * @param string  $value
+     * @param string $name
+     * @param string $value
      * @param integer $maxage
-     * @param string  $path
-     * @param string  $domain
-     * @param bool    $secure
-     * @param bool    $HTTPOnly
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param bool $HTTPOnly
      * @return bool|void
      */
     public static function setcookie(
@@ -345,7 +346,8 @@ class Http
         $domain = '',
         $secure = false,
         $HTTPOnly = false
-    ) {
+    )
+    {
         if (PHP_SAPI != 'cli') {
             return setcookie($name, $value, $maxage, $path, $domain, $secure, $HTTPOnly);
         }
@@ -366,13 +368,13 @@ class Http
     public static function sessionCreateId()
     {
         mt_srand();
-        return bin2hex(pack('d', microtime(true)) . pack('N',mt_rand(0, 2147483647)));
+        return bin2hex(pack('d', microtime(true)) . pack('N', mt_rand(0, 2147483647)));
     }
 
     /**
      * sessionId
      *
-     * @param string  $id
+     * @param string $id
      *
      * @return string|null
      */
@@ -390,7 +392,7 @@ class Http
     /**
      * sessionName
      *
-     * @param string  $name
+     * @param string $name
      *
      * @return string
      */
@@ -400,7 +402,7 @@ class Http
             return $name ? session_name($name) : session_name();
         }
         $session_name = HttpCache::$sessionName;
-        if ($name && ! static::sessionStarted()) {
+        if ($name && !static::sessionStarted()) {
             HttpCache::$sessionName = $name;
         }
         return $session_name;
@@ -409,7 +411,7 @@ class Http
     /**
      * sessionSavePath
      *
-     * @param string  $path
+     * @param string $path
      *
      * @return void
      */
@@ -540,7 +542,7 @@ class Http
      */
     protected static function parseUploadFiles($http_body, $http_post_boundary)
     {
-        $http_body           = substr($http_body, 0, strlen($http_body) - (strlen($http_post_boundary) + 4));
+        $http_body = substr($http_body, 0, strlen($http_body) - (strlen($http_post_boundary) + 4));
         $boundary_data_array = explode($http_post_boundary . "\r\n", $http_body);
         if ($boundary_data_array[0] === '') {
             unset($boundary_data_array[0]);
@@ -550,7 +552,7 @@ class Http
             list($boundary_header_buffer, $boundary_value) = explode("\r\n\r\n", $boundary_data_buffer, 2);
             // Remove \r\n from the end of buffer.
             $boundary_value = substr($boundary_value, 0, -2);
-            $key ++;
+            $key++;
             foreach (explode("\r\n", $boundary_header_buffer) as $item) {
                 list($header_key, $header_value) = explode(": ", $item);
                 $header_key = strtolower($header_key);
@@ -591,14 +593,14 @@ class Http
     public static function tryGcSessions()
     {
         if (HttpCache::$sessionGcProbability <= 0 ||
-            HttpCache::$sessionGcDivisor     <= 0 ||
+            HttpCache::$sessionGcDivisor <= 0 ||
             rand(1, HttpCache::$sessionGcDivisor) > HttpCache::$sessionGcProbability) {
             return;
         }
 
         $time_now = time();
-        foreach(glob(HttpCache::$sessionPath.'/ses*') as $file) {
-            if(is_file($file) && $time_now - filemtime($file) > HttpCache::$sessionGcMaxLifeTime) {
+        foreach (glob(HttpCache::$sessionPath . '/ses*') as $file) {
+            if (is_file($file) && $time_now - filemtime($file) > HttpCache::$sessionGcMaxLifeTime) {
                 unlink($file);
             }
         }
@@ -659,13 +661,13 @@ class HttpCache
     /**
      * @var HttpCache
      */
-    public static $instance             = null;
-    public static $header               = array();
-    public static $gzip                 = false;
-    public static $sessionPath          = '';
-    public static $sessionName          = '';
+    public static $instance = null;
+    public static $header = array();
+    public static $gzip = false;
+    public static $sessionPath = '';
+    public static $sessionName = '';
     public static $sessionGcProbability = 1;
-    public static $sessionGcDivisor     = 1000;
+    public static $sessionGcDivisor = 1000;
     public static $sessionGcMaxLifeTime = 1440;
     public $sessionStarted = false;
     public $sessionFile = '';

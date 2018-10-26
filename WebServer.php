@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix;
 
 use brebvix\Protocols\Http;
@@ -52,9 +53,9 @@ class WebServer extends Worker
      */
     public function addRoot($domain, $config)
     {
-	if (is_string($config)) {
+        if (is_string($config)) {
             $config = array('root' => $config);
-	}
+        }
         $this->serverRoot[$domain] = $config;
     }
 
@@ -62,7 +63,7 @@ class WebServer extends Worker
      * Construct.
      *
      * @param string $socket_name
-     * @param array  $context_option
+     * @param array $context_option
      */
     public function __construct($socket_name, $context_option = array())
     {
@@ -79,8 +80,8 @@ class WebServer extends Worker
     public function run()
     {
         $this->_onWorkerStart = $this->onWorkerStart;
-        $this->onWorkerStart  = array($this, 'onWorkerStart');
-        $this->onMessage      = array($this, 'onMessage');
+        $this->onWorkerStart = array($this, 'onWorkerStart');
+        $this->onMessage = array($this, 'onMessage');
         parent::run();
     }
 
@@ -132,8 +133,8 @@ class WebServer extends Worker
         }
         foreach ($items as $content) {
             if (preg_match("/\s*(\S+)\s+(\S.+)/", $content, $match)) {
-                $mime_type                      = $match[1];
-                $workerman_file_extension_var   = $match[2];
+                $mime_type = $match[1];
+                $workerman_file_extension_var = $match[2];
                 $workerman_file_extension_array = explode(' ', substr($workerman_file_extension_var, 0, -1));
                 foreach ($workerman_file_extension_array as $workerman_file_extension) {
                     self::$mimeTypeMap[$workerman_file_extension] = $mime_type;
@@ -151,7 +152,7 @@ class WebServer extends Worker
     public function onMessage($connection)
     {
         // REQUEST_URI.
-        $workerman_url_info = parse_url('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        $workerman_url_info = parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         if (!$workerman_url_info) {
             Http::header('HTTP/1.1 400 Bad Request');
             $connection->close('<h1>400 Bad Request</h1>');
@@ -160,23 +161,23 @@ class WebServer extends Worker
 
         $workerman_path = isset($workerman_url_info['path']) ? $workerman_url_info['path'] : '/';
 
-        $workerman_path_info      = pathinfo($workerman_path);
+        $workerman_path_info = pathinfo($workerman_path);
         $workerman_file_extension = isset($workerman_path_info['extension']) ? $workerman_path_info['extension'] : '';
         if ($workerman_file_extension === '') {
-            $workerman_path           = ($len = strlen($workerman_path)) && $workerman_path[$len - 1] === '/' ? $workerman_path . 'index.php' : $workerman_path . '/index.php';
+            $workerman_path = ($len = strlen($workerman_path)) && $workerman_path[$len - 1] === '/' ? $workerman_path . 'index.php' : $workerman_path . '/index.php';
             $workerman_file_extension = 'php';
         }
 
         $workerman_siteConfig = isset($this->serverRoot[$_SERVER['SERVER_NAME']]) ? $this->serverRoot[$_SERVER['SERVER_NAME']] : current($this->serverRoot);
-		$workerman_root_dir = $workerman_siteConfig['root'];
+        $workerman_root_dir = $workerman_siteConfig['root'];
         $workerman_file = "$workerman_root_dir/$workerman_path";
-		if(isset($workerman_siteConfig['additionHeader'])){
-			Http::header($workerman_siteConfig['additionHeader']);
-		}
+        if (isset($workerman_siteConfig['additionHeader'])) {
+            Http::header($workerman_siteConfig['additionHeader']);
+        }
         if ($workerman_file_extension === 'php' && !is_file($workerman_file)) {
             $workerman_file = "$workerman_root_dir/index.php";
             if (!is_file($workerman_file)) {
-                $workerman_file           = "$workerman_root_dir/index.html";
+                $workerman_file = "$workerman_root_dir/index.html";
                 $workerman_file_extension = 'html';
             }
         }
@@ -228,11 +229,11 @@ class WebServer extends Worker
         } else {
             // 404
             Http::header("HTTP/1.1 404 Not Found");
-			if(isset($workerman_siteConfig['custom404']) && file_exists($workerman_siteConfig['custom404'])){
-				$html404 = file_get_contents($workerman_siteConfig['custom404']);
-			}else{
-				$html404 = '<html><head><title>404 File not found</title></head><body><center><h3>404 Not Found</h3></center></body></html>';
-			}
+            if (isset($workerman_siteConfig['custom404']) && file_exists($workerman_siteConfig['custom404'])) {
+                $html404 = file_get_contents($workerman_siteConfig['custom404']);
+            } else {
+                $html404 = '<html><head><title>404 File not found</title></head><body><center><h3>404 Not Found</h3></center></body></html>';
+            }
             $connection->close($html404);
             return;
         }
@@ -272,37 +273,32 @@ class WebServer extends Worker
         $header .= "Connection: keep-alive\r\n";
         $header .= $modified_time;
         $header .= "Content-Length: $file_size\r\n\r\n";
-        $trunk_limit_size = 1024*1024;
+        $trunk_limit_size = 1024 * 1024;
         if ($file_size < $trunk_limit_size) {
-            return $connection->send($header.file_get_contents($file_path), true);
+            return $connection->send($header . file_get_contents($file_path), true);
         }
         $connection->send($header, true);
 
         // Read file content from disk piece by piece and send to client.
         $connection->fileHandler = fopen($file_path, 'r');
-        $do_write = function()use($connection)
-        {
+        $do_write = function () use ($connection) {
             // Send buffer not full.
-            while(empty($connection->bufferFull))
-            {
+            while (empty($connection->bufferFull)) {
                 // Read from disk.
                 $buffer = fread($connection->fileHandler, 8192);
                 // Read eof.
-                if($buffer === '' || $buffer === false)
-                {
+                if ($buffer === '' || $buffer === false) {
                     return;
                 }
                 $connection->send($buffer, true);
             }
         };
         // Send buffer full.
-        $connection->onBufferFull = function($connection)
-        {
+        $connection->onBufferFull = function ($connection) {
             $connection->bufferFull = true;
         };
         // Send buffer drain.
-        $connection->onBufferDrain = function($connection)use($do_write)
-        {
+        $connection->onBufferDrain = function ($connection) use ($do_write) {
             $connection->bufferFull = false;
             $do_write();
         };

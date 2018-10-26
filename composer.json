@@ -1,43 +1,43 @@
 {
-    "name": "brebvix/workerman",
-    "type": "library",
-    "keywords": [
-        "event-loop",
-        "asynchronous"
-    ],
-    "homepage": "https://github.com/brebvix/Workerman",
-    "license": "MIT",
-    "description": "An asynchronous event driven PHP framework for easily building fast, scalable network applications.",
-    "authors": [
-        {
-            "name": "walkor",
-            "email": "walkor@workerman.net",
-            "homepage": "http://www.workerman.net",
-            "role": "Developer"
-        },
-        {
-            "name": "brebvix",
-            "email": "mebow.software@gmail.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "walkor@workerman.net",
-        "issues": "https://github.com/walkor/workerman/issues",
-        "forum": "http://wenda.workerman.net/",
-        "wiki": "http://doc3.workerman.net/index.html",
-        "source": "https://github.com/brebvix/workerman"
+  "name": "brebvix/workerman",
+  "type": "library",
+  "keywords": [
+    "event-loop",
+    "asynchronous"
+  ],
+  "homepage": "https://github.com/brebvix/Workerman",
+  "license": "MIT",
+  "description": "An asynchronous event driven PHP framework for easily building fast, scalable network applications.",
+  "authors": [
+    {
+      "name": "walkor",
+      "email": "walkor@workerman.net",
+      "homepage": "http://www.workerman.net",
+      "role": "Developer"
     },
-    "require": {
-        "php": ">=5.3"
-    },
-    "suggest": {
-        "ext-event": "For better performance. "
-    },
-    "autoload": {
-        "psr-4": {
-            "brebvix\\": "./"
-        }
-    },
-    "minimum-stability": "dev"
+    {
+      "name": "brebvix",
+      "email": "mebow.software@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "walkor@workerman.net",
+    "issues": "https://github.com/walkor/workerman/issues",
+    "forum": "http://wenda.workerman.net/",
+    "wiki": "http://doc3.workerman.net/index.html",
+    "source": "https://github.com/brebvix/workerman"
+  },
+  "require": {
+    "php": ">=5.3"
+  },
+  "suggest": {
+    "ext-event": "For better performance. "
+  },
+  "autoload": {
+    "psr-4": {
+      "brebvix\\": "./"
+    }
+  },
+  "minimum-stability": "dev"
 }

@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Protocols;
 
 use brebvix\Connection\TcpConnection;
@@ -23,7 +24,7 @@ class Frame
     /**
      * Check the integrity of the package.
      *
-     * @param string        $buffer
+     * @param string $buffer
      * @param TcpConnection $connection
      * @return int
      */

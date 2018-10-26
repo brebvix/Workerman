@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Events;
 
 use brebvix\Worker;
@@ -64,8 +65,8 @@ class Libevent implements EventInterface
     {
         switch ($flag) {
             case self::EV_SIGNAL:
-                $fd_key                      = (int)$fd;
-                $real_flag                   = EV_SIGNAL | EV_PERSIST;
+                $fd_key = (int)$fd;
+                $real_flag = EV_SIGNAL | EV_PERSIST;
                 $this->_eventSignal[$fd_key] = event_new();
                 if (!event_set($this->_eventSignal[$fd_key], $fd, $real_flag, $func, null)) {
                     return false;
@@ -79,7 +80,7 @@ class Libevent implements EventInterface
                 return true;
             case self::EV_TIMER:
             case self::EV_TIMER_ONCE:
-                $event    = event_new();
+                $event = event_new();
                 $timer_id = (int)$event;
                 if (!event_set($event, 0, EV_TIMEOUT, array($this, 'timerCallback'), $timer_id)) {
                     return false;
@@ -97,7 +98,7 @@ class Libevent implements EventInterface
                 return $timer_id;
 
             default :
-                $fd_key    = (int)$fd;
+                $fd_key = (int)$fd;
                 $real_flag = $flag === self::EV_READ ? EV_READ | EV_PERSIST : EV_WRITE | EV_PERSIST;
 
                 $event = event_new();
@@ -161,7 +162,7 @@ class Libevent implements EventInterface
      * Timer callback.
      *
      * @param mixed $_null1
-     * @param int   $_null2
+     * @param int $_null2
      * @param mixed $timer_id
      */
     protected function timerCallback($_null1, $_null2, $timer_id)

@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Events;
 
 /**
@@ -98,7 +99,7 @@ class Select implements EventInterface
         // Create a pipeline and put into the collection of the read to read the descriptor to avoid empty polling.
         $this->channel = stream_socket_pair(DIRECTORY_SEPARATOR === '/' ? STREAM_PF_UNIX : STREAM_PF_INET,
             STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
-        if($this->channel) {
+        if ($this->channel) {
             stream_set_blocking($this->channel[0], 0);
             $this->_readFds[0] = $this->channel[0];
         }
@@ -121,7 +122,7 @@ class Select implements EventInterface
                 } else if (DIRECTORY_SEPARATOR !== '/' && $count >= 256) {
                     echo "Warning: system call select exceeded the maximum number of connections 256.\n";
                 }
-                $fd_key                           = (int)$fd;
+                $fd_key = (int)$fd;
                 $this->_allEvents[$fd_key][$flag] = array($func, $fd);
                 if ($flag === self::EV_READ) {
                     $this->_readFds[$fd_key] = $fd;
@@ -136,10 +137,10 @@ class Select implements EventInterface
                 break;
             case self::EV_SIGNAL:
                 // Windows not support signal.
-                if(DIRECTORY_SEPARATOR !== '/') {
+                if (DIRECTORY_SEPARATOR !== '/') {
                     return false;
                 }
-                $fd_key                              = (int)$fd;
+                $fd_key = (int)$fd;
                 $this->_signalEvents[$fd_key][$flag] = array($func, $fd);
                 pcntl_signal($fd, array($this, 'signalHandler'));
                 break;
@@ -150,9 +151,9 @@ class Select implements EventInterface
                 $this->_scheduler->insert($timer_id, -$run_time);
                 $this->_eventTimer[$timer_id] = array($func, (array)$args, $flag, $fd);
                 $select_timeout = ($run_time - microtime(true)) * 1000000;
-                if( $this->_selectTimeout > $select_timeout ){ 
-                    $this->_selectTimeout = $select_timeout;   
-                }  
+                if ($this->_selectTimeout > $select_timeout) {
+                    $this->_selectTimeout = $select_timeout;
+                }
                 return $timer_id;
         }
 
@@ -190,13 +191,12 @@ class Select implements EventInterface
                 return true;
             case self::EV_EXCEPT:
                 unset($this->_allEvents[$fd_key][$flag], $this->_exceptFds[$fd_key]);
-                if(empty($this->_allEvents[$fd_key]))
-                {
+                if (empty($this->_allEvents[$fd_key])) {
                     unset($this->_allEvents[$fd_key]);
                 }
                 return true;
             case self::EV_SIGNAL:
-                if(DIRECTORY_SEPARATOR !== '/') {
+                if (DIRECTORY_SEPARATOR !== '/') {
                     return false;
                 }
                 unset($this->_signalEvents[$fd_key]);
@@ -218,10 +218,10 @@ class Select implements EventInterface
     protected function tick()
     {
         while (!$this->_scheduler->isEmpty()) {
-            $scheduler_data       = $this->_scheduler->top();
-            $timer_id             = $scheduler_data['data'];
-            $next_run_time        = -$scheduler_data['priority'];
-            $time_now             = microtime(true);
+            $scheduler_data = $this->_scheduler->top();
+            $timer_id = $scheduler_data['data'];
+            $next_run_time = -$scheduler_data['priority'];
+            $time_now = microtime(true);
             $this->_selectTimeout = ($next_run_time - $time_now) * 1000000;
             if ($this->_selectTimeout <= 0) {
                 $this->_scheduler->extract();
@@ -264,17 +264,18 @@ class Select implements EventInterface
     {
         $e = null;
         while (1) {
-            if(DIRECTORY_SEPARATOR === '/') {
+            if (DIRECTORY_SEPARATOR === '/') {
                 // Calls signal handlers for pending signals
                 pcntl_signal_dispatch();
             }
 
-            $read  = $this->_readFds;
+            $read = $this->_readFds;
             $write = $this->_writeFds;
             $except = $this->_exceptFds;
 
             // Waiting read/write/signal/timeout events.
-            set_error_handler(function(){});
+            set_error_handler(function () {
+            });
             $ret = stream_select($read, $write, $except, 0, $this->_selectTimeout);
             restore_error_handler();
 
@@ -307,10 +308,10 @@ class Select implements EventInterface
                 }
             }
 
-            if($except) {
-                foreach($except as $fd) {
-                    $fd_key = (int) $fd;
-                    if(isset($this->_allEvents[$fd_key][self::EV_EXCEPT])) {
+            if ($except) {
+                foreach ($except as $fd) {
+                    $fd_key = (int)$fd;
+                    if (isset($this->_allEvents[$fd_key][self::EV_EXCEPT])) {
                         call_user_func_array($this->_allEvents[$fd_key][self::EV_EXCEPT][0],
                             array($this->_allEvents[$fd_key][self::EV_EXCEPT][1]));
                     }

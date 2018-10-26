@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Connection;
 
 /**
@@ -44,11 +45,11 @@ class UdpConnection extends ConnectionInterface
      * Construct.
      *
      * @param resource $socket
-     * @param string   $remote_address
+     * @param string $remote_address
      */
     public function __construct($socket, $remote_address)
     {
-        $this->_socket        = $socket;
+        $this->_socket = $socket;
         $this->_remoteAddress = $remote_address;
     }
 
@@ -56,13 +57,13 @@ class UdpConnection extends ConnectionInterface
      * Sends data on the connection.
      *
      * @param string $send_buffer
-     * @param bool   $raw
+     * @param bool $raw
      * @return void|boolean
      */
     public function send($send_buffer, $raw = false)
     {
         if (false === $raw && $this->protocol) {
-            $parser      = $this->protocol;
+            $parser = $this->protocol;
             $send_buffer = $parser::encode($send_buffer, $this);
             if ($send_buffer === '') {
                 return null;
@@ -178,7 +179,7 @@ class UdpConnection extends ConnectionInterface
      * Close connection.
      *
      * @param mixed $data
-     * @param bool  $raw
+     * @param bool $raw
      * @return bool
      */
     public function close($data = null, $raw = false)

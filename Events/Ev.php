@@ -10,6 +10,7 @@
  * @link    http://www.workerman.net/
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Events;
 
 use brebvix\Worker;
@@ -67,20 +68,20 @@ class Ev implements EventInterface
         };
         switch ($flag) {
             case self::EV_SIGNAL:
-                $event                   = new \EvSignal($fd, $callback);
+                $event = new \EvSignal($fd, $callback);
                 $this->_eventSignal[$fd] = $event;
                 return true;
             case self::EV_TIMER:
             case self::EV_TIMER_ONCE:
-                $repeat                             = $flag == self::EV_TIMER_ONCE ? 0 : $fd;
-                $param                              = array($func, (array)$args, $flag, $fd, self::$_timerId);
-                $event                              = new \EvTimer($fd, $repeat, array($this, 'timerCallback'), $param);
+                $repeat = $flag == self::EV_TIMER_ONCE ? 0 : $fd;
+                $param = array($func, (array)$args, $flag, $fd, self::$_timerId);
+                $event = new \EvTimer($fd, $repeat, array($this, 'timerCallback'), $param);
                 $this->_eventTimer[self::$_timerId] = $event;
                 return self::$_timerId++;
             default :
-                $fd_key                           = (int)$fd;
-                $real_flag                        = $flag === self::EV_READ ? \Ev::READ : \Ev::WRITE;
-                $event                            = new \EvIo($fd, $real_flag, $callback);
+                $fd_key = (int)$fd;
+                $real_flag = $flag === self::EV_READ ? \Ev::READ : \Ev::WRITE;
+                $event = new \EvIo($fd, $real_flag, $callback);
                 $this->_allEvents[$fd_key][$flag] = $event;
                 return true;
         }
@@ -130,7 +131,7 @@ class Ev implements EventInterface
      */
     public function timerCallback($event)
     {
-        $param    = $event->data;
+        $param = $event->data;
         $timer_id = $param[4];
         if ($param[2] === self::EV_TIMER_ONCE) {
             $this->_eventTimer[$timer_id]->stop();

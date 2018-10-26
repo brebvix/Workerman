@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Events;
 
 interface EventInterface
@@ -60,10 +61,10 @@ interface EventInterface
     /**
      * Add event listener to event loop.
      *
-     * @param mixed    $fd
-     * @param int      $flag
+     * @param mixed $fd
+     * @param int $flag
      * @param callable $func
-     * @param mixed    $args
+     * @param mixed $args
      * @return bool
      */
     public function add($fd, $flag, $func, $args = null);
@@ -72,7 +73,7 @@ interface EventInterface
      * Remove event listener from event loop.
      *
      * @param mixed $fd
-     * @param int   $flag
+     * @param int $flag
      * @return bool
      */
     public function del($fd, $flag);

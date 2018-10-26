@@ -11,6 +11,7 @@
  * @link      https://github.com/ares333/Workerman
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Events;
 
 use Swoole\Event;
@@ -38,13 +39,13 @@ class Swoole implements EventInterface
      */
     public function add($fd, $flag, $func, $args = null)
     {
-        if (! isset($args)) {
+        if (!isset($args)) {
             $args = array();
         }
         switch ($flag) {
             case self::EV_SIGNAL:
                 $res = pcntl_signal($fd, $func, false);
-                if (! $this->_hasSignal && $res) {
+                if (!$this->_hasSignal && $res) {
                     Timer::tick(static::$signalDispatchInterval,
                         function () {
                             pcntl_signal_dispatch();
@@ -60,7 +61,7 @@ class Swoole implements EventInterface
                     function ($timer_id = null) use ($func, $args, $mapId) {
                         call_user_func_array($func, $args);
                         // EV_TIMER_ONCE
-                        if (! isset($timer_id)) {
+                        if (!isset($timer_id)) {
                             // may be deleted in $func
                             if (array_key_exists($mapId, $this->_timerOnceMap)) {
                                 $timer_id = $this->_timerOnceMap[$mapId];
@@ -78,8 +79,8 @@ class Swoole implements EventInterface
                 return $timer_id;
             case self::EV_READ:
             case self::EV_WRITE:
-                $fd_key = (int) $fd;
-                if (! isset($this->_fd[$fd_key])) {
+                $fd_key = (int)$fd;
+                if (!isset($this->_fd[$fd_key])) {
                     if ($flag == self::EV_READ) {
                         $res = Event::add($fd, $func, null, SWOOLE_EVENT_READ);
                         $fd_type = SWOOLE_EVENT_READ;
@@ -125,7 +126,7 @@ class Swoole implements EventInterface
             case self::EV_TIMER:
             case self::EV_TIMER_ONCE:
                 // already remove in EV_TIMER_ONCE callback.
-                if (! array_key_exists($fd, $this->_timer)) {
+                if (!array_key_exists($fd, $this->_timer)) {
                     return true;
                 }
                 $res = Timer::clear($fd);
@@ -139,13 +140,13 @@ class Swoole implements EventInterface
                 return $res;
             case self::EV_READ:
             case self::EV_WRITE:
-                $fd_key = (int) $fd;
+                $fd_key = (int)$fd;
                 if (isset($this->_fd[$fd_key])) {
                     $fd_val = $this->_fd[$fd_key];
                     if ($flag == self::EV_READ) {
-                        $flag_remove = ~ SWOOLE_EVENT_READ;
+                        $flag_remove = ~SWOOLE_EVENT_READ;
                     } else {
-                        $flag_remove = ~ SWOOLE_EVENT_WRITE;
+                        $flag_remove = ~SWOOLE_EVENT_WRITE;
                     }
                     $fd_val &= $flag_remove;
                     if (0 === $fd_val) {

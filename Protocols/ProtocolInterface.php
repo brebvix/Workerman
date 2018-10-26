@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Protocols;
 
 use brebvix\Connection\ConnectionInterface;
@@ -27,7 +28,7 @@ interface ProtocolInterface
      * If the package has something wrong please return false the connection will be closed.
      *
      * @param ConnectionInterface $connection
-     * @param string              $recv_buffer
+     * @param string $recv_buffer
      * @return int|false
      */
     public static function input($recv_buffer, ConnectionInterface $connection);
@@ -36,7 +37,7 @@ interface ProtocolInterface
      * Decode package and emit onMessage($message) callback, $message is the result that decode returned.
      *
      * @param ConnectionInterface $connection
-     * @param string              $recv_buffer
+     * @param string $recv_buffer
      * @return mixed
      */
     public static function decode($recv_buffer, ConnectionInterface $connection);
@@ -45,7 +46,7 @@ interface ProtocolInterface
      * Encode package brefore sending to client.
      *
      * @param ConnectionInterface $connection
-     * @param mixed               $data
+     * @param mixed $data
      * @return string
      */
     public static function encode($data, ConnectionInterface $connection);

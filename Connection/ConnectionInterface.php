@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Connection;
 
 /**
@@ -25,9 +26,9 @@ abstract class  ConnectionInterface
      */
     public static $statistics = array(
         'connection_count' => 0,
-        'total_request'    => 0,
-        'throw_exception'  => 0,
-        'send_fail'        => 0,
+        'total_request' => 0,
+        'throw_exception' => 0,
+        'send_fail' => 0,
     );
 
     /**

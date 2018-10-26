@@ -11,6 +11,7 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace brebvix\Connection;
 
 use brebvix\Events\EventInterface;
@@ -62,7 +63,7 @@ class AsyncUdpConnection extends UdpConnection
         list($scheme, $address) = explode(':', $remote_address, 2);
         // Check application layer protocol class.
         if ($scheme !== 'udp') {
-            $scheme         = ucfirst($scheme);
+            $scheme = ucfirst($scheme);
             $this->protocol = '\\Protocols\\' . $scheme;
             if (!class_exists($this->protocol)) {
                 $this->protocol = "\\brebvix\\Protocols\\$scheme";
@@ -71,11 +72,11 @@ class AsyncUdpConnection extends UdpConnection
                 }
             }
         }
-        
+
         $this->_remoteAddress = substr($address, 2);
         $this->_contextOption = $context_option;
     }
-    
+
     /**
      * For udp package.
      *
@@ -88,10 +89,10 @@ class AsyncUdpConnection extends UdpConnection
         if (false === $recv_buffer || empty($remote_address)) {
             return false;
         }
-        
+
         if ($this->onMessage) {
             if ($this->protocol) {
-                $parser      = $this->protocol;
+                $parser = $this->protocol;
                 $recv_buffer = $parser::decode($recv_buffer, $this);
             }
             ConnectionInterface::$statistics['total_request']++;
@@ -112,13 +113,13 @@ class AsyncUdpConnection extends UdpConnection
      * Sends data on the connection.
      *
      * @param string $send_buffer
-     * @param bool   $raw
+     * @param bool $raw
      * @return void|boolean
      */
     public function send($send_buffer, $raw = false)
     {
         if (false === $raw && $this->protocol) {
-            $parser      = $this->protocol;
+            $parser = $this->protocol;
             $send_buffer = $parser::encode($send_buffer, $this);
             if ($send_buffer === '') {
                 return null;
@@ -129,8 +130,8 @@ class AsyncUdpConnection extends UdpConnection
         }
         return strlen($send_buffer) === stream_socket_sendto($this->_socket, $send_buffer, 0);
     }
-    
-    
+
+
     /**
      * Close connection.
      *
@@ -185,9 +186,9 @@ class AsyncUdpConnection extends UdpConnection
             Worker::safeEcho(new \Exception($errmsg));
             return;
         }
-        
+
         stream_set_blocking($this->_socket, false);
-        
+
         if ($this->onMessage) {
             Worker::$globalEvent->add($this->_socket, EventInterface::EV_READ, array($this, 'baseRead'));
         }
