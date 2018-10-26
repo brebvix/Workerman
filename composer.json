@@ -1,5 +1,5 @@
 {
-    "name": "workerman/workerman",
+    "name": "brebvix/workerman",
     "type": "library",
     "keywords": [
         "event-loop",
