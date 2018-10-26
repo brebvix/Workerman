@@ -793,16 +793,16 @@ class Worker
             'connections',
         );
         $usage = "Usage: php yourfile <command> [mode]\nCommands: \nstart\t\tStart worker in DEBUG mode.\n\t\tUse mode -d to start in DAEMON mode.\nstop\t\tStop worker.\n\t\tUse mode -g to stop gracefully.\nrestart\t\tRestart workers.\n\t\tUse mode -d to start in DAEMON mode.\n\t\tUse mode -g to stop gracefully.\nreload\t\tReload codes.\n\t\tUse mode -g to reload gracefully.\nstatus\t\tGet worker status.\n\t\tUse mode -d to show live status.\nconnections\tGet worker connections.\n";
-        if (!isset($argv[1]) || !in_array($argv[1], $available_commands)) {
-            if (isset($argv[1])) {
-                static::safeEcho('Unknown command: ' . $argv[1] . "\n");
+        if (!isset($argv[2]) || !in_array($argv[2], $available_commands)) {
+            if (isset($argv[2])) {
+                static::safeEcho('Unknown command: ' . $argv[2] . "\n");
             }
             exit($usage);
         }
 
         // Get command.
-        $command  = trim($argv[1]);
-        $command2 = isset($argv[2]) ? $argv[2] : '';
+        $command  = trim($argv[2]);
+        $command2 = isset($argv[3]) ? $argv[3] : '';
 
         // Start command.
         $mode = '';
@@ -1198,7 +1198,7 @@ class Worker
         if (!class_exists('\Swoole\Event', false)) {
             unset(static::$_availableEventLoops['swoole']);
         }
-        
+
         $loop_name = '';
         foreach (static::$_availableEventLoops as $name=>$class) {
             if (extension_loaded($name)) {
@@ -2299,7 +2299,7 @@ class Worker
         }
 
         restore_error_handler();
-        
+
         // Try to emit onWorkerStart callback.
         if ($this->onWorkerStart) {
             try {
