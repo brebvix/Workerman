@@ -11,7 +11,7 @@ Yii2
 ## Installation
 
 ```
-composer require workerman/workerman
+composer require brebvix/workerman
 ```
 
 ## Basic Usage
@@ -19,7 +19,6 @@ composer require workerman/workerman
 ### A websocket server 
 ```php
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 use brebvix\Worker;
 
 // Create a Websocket server
