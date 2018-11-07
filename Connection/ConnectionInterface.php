@@ -187,7 +187,7 @@ abstract class  ConnectionInterface
     /**
      * Возвращает user_id пользователя, если тот авторизован
      *
-     * @return bool
+     * @return bool|ObjectId
      */
     public function getUserId()
     {
