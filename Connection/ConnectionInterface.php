@@ -14,11 +14,18 @@
 
 namespace brebvix\Connection;
 
+use MongoDB\BSON\ObjectId;
+
 /**
  * ConnectionInterface.
  */
 abstract class  ConnectionInterface
 {
+    private $_authorized = false;
+    private $_user_id;
+    private $_identifier;
+    private $_socket_id;
+
     /**
      * Statistics for status command.
      *
@@ -123,4 +130,91 @@ abstract class  ConnectionInterface
      * @return void
      */
     abstract public function close($data = null);
+
+    /**
+     * Запоминает ID пользователя и ставит соответствующий статус
+     *
+     * @param ObjectId $user_id
+     * @return bool
+     */
+    public function authorized(ObjectId $user_id): bool
+    {
+        return ($this->_authorized = true) && ($this->_user_id = $user_id);
+    }
+
+    /**
+     * Помечает пользователя как неавторизованного
+     *
+     * @return bool
+     */
+    public function logout(): bool
+    {
+        return ($this->_user_id = null) && ($this->_authorized = false);
+    }
+
+    /**
+     * Указывает идентификатор пользователя
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    public function setIdentifier(string $identifier): bool
+    {
+        return ($this->_identifier = $identifier);
+    }
+
+    /**
+     * Указывает socket_id пользователя
+     *
+     * @param int $socket_id
+     * @return bool
+     */
+    public function setSocketId(int $socket_id): bool
+    {
+        return ($this->_socket_id = $socket_id);
+    }
+
+    /**
+     * Проверяет, авторизован ли пользователь
+     *
+     * @return bool
+     */
+    public function isAuthorized(): bool
+    {
+        return $this->_authorized;
+    }
+
+    /**
+     * Возвращает user_id пользователя, если тот авторизован
+     *
+     * @return bool
+     */
+    public function getUserId()
+    {
+        if ($this->isAuthorized()) {
+            return $this->_user_id;
+        }
+
+        return false;
+    }
+
+    /**
+     * Возвращает идентификатор пользователя
+     *
+     * @return mixed
+     */
+    public function getIdentifier()
+    {
+        return $this->_identifier;
+    }
+
+    /**
+     * Возвращает socket_id пользователя
+     *
+     * @return mixed
+     */
+    public function getSocketId()
+    {
+        return $this->_socket_id;
+    }
 }

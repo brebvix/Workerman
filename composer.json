@@ -29,7 +29,7 @@
     "source": "https://github.com/brebvix/workerman"
   },
   "require": {
-    "php": ">=5.3"
+    "php": ">=7.2"
   },
   "suggest": {
     "ext-event": "For better performance. "
