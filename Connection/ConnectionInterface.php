@@ -25,6 +25,7 @@ abstract class  ConnectionInterface
     private $_user_id;
     private $_identifier;
     private $_socket_id;
+    private $_identificatorParams = [];
 
     /**
      * Statistics for status command.
@@ -216,5 +217,22 @@ abstract class  ConnectionInterface
     public function getSocketId()
     {
         return $this->_socket_id;
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     */
+    public function setIdentificatorParams(array $params): array
+    {
+        return ($this->_identificatorParams = $params);
+    }
+
+    /**
+     * @return array
+     */
+    public function getIdentificatorParams(): array
+    {
+        return $this->_identificatorParams;
     }
 }
