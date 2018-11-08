@@ -22,7 +22,7 @@ use MongoDB\BSON\ObjectId;
 abstract class  ConnectionInterface
 {
     private $_authorized = false;
-    private $_user_id;
+    private $_user_id = false;
     private $_identifier;
     private $_socket_id;
     private $_identifierParams = [];
@@ -192,11 +192,7 @@ abstract class  ConnectionInterface
      */
     public function getUserId()
     {
-        if ($this->isAuthorized()) {
-            return $this->_user_id;
-        }
-
-        return false;
+        return $this->_user_id;
     }
 
     /**
