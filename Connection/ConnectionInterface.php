@@ -235,4 +235,13 @@ abstract class  ConnectionInterface
     {
         return $this->_identifierParams;
     }
+
+    /**
+     * @param ObjectId $id
+     * @return ObjectId
+     */
+    public function setUserId(ObjectId $id): ObjectId
+    {
+        return ($this->_user_id = $id);
+    }
 }
