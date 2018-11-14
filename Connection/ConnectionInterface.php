@@ -26,6 +26,7 @@ abstract class  ConnectionInterface
     private $_identifier;
     private $_socket_id;
     private $_identifierParams = [];
+    private $_params = [];
 
     /**
      * Statistics for status command.
@@ -239,5 +240,36 @@ abstract class  ConnectionInterface
     public function setUserId(ObjectId $id): ObjectId
     {
         return ($this->_user_id = $id);
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function setParam($key, $value)
+    {
+        $this->_params[$key] = $value;
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function paramExist($key)
+    {
+        return isset($this->_params[$key]);
+    }
+
+    /**
+     * @param $key
+     * @return bool|mixed
+     */
+    public function getParam($key)
+    {
+        if (!isset($this->_params[$key])) {
+            return false;
+        }
+
+        return $this->_params[$key];
     }
 }
