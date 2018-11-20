@@ -564,7 +564,7 @@ class Worker
 
         // For statistics.
         static::$_globalStatistics['start_timestamp'] = time();
-        static::$_statisticsFile = __DIR__ . "/$unique_prefix.status";
+        static::$_statisticsFile = __DIR__ . "/../$unique_prefix.status";
 
         // Process title.
         static::setProcessTitle('WorkerMan: master process  start_file=' . static::$_startFile);
