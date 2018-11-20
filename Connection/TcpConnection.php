@@ -840,6 +840,8 @@ class TcpConnection extends ConnectionInterface
         }
         if ($this->_sendBuffer === '') {
             $this->destroy();
+        } else {
+            $this->pauseRecv();
         }
     }
 
