@@ -290,16 +290,17 @@ class AsyncTcpConnection extends TcpConnection
     public function checkConnection()
     {
         // Remove EV_EXPECT for windows.
-        if (DIRECTORY_SEPARATOR === '\\') {
+
+        if(DIRECTORY_SEPARATOR === '\\') {
             Worker::$globalEvent->del($this->_socket, EventInterface::EV_EXCEPT);
         }
 
         // Remove write listener.
         Worker::$globalEvent->del($this->_socket, EventInterface::EV_WRITE);
+
         if ($this->_status != self::STATUS_CONNECTING) {
             return;
         }
-
 
         // Check socket state.
         if ($address = stream_socket_get_name($this->_socket, true)) {

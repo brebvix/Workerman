@@ -34,7 +34,8 @@ class Worker
      *
      * @var string
      */
-    const VERSION = '3.5.16';
+
+    const VERSION = '3.5.18';
 
     /**
      * Status starting.
@@ -337,7 +338,7 @@ class Worker
     protected static $_workers = array();
 
     /**
-     * All worker porcesses pid.
+     * All worker processes pid.
      * The format is like this [worker_id=>[pid=>pid, pid=>pid, ..], ..]
      *
      * @var array
@@ -607,9 +608,10 @@ class Worker
             // Status name.
             $worker->status = '<g> [OK] </g>';
 
-            // Get clolumn mapping for UI
-            foreach (static::getUiColumns() as $column_name => $prop) {
-                !isset($worker->{$prop}) && $worker->{$prop} = 'NNNN';
+            // Get column mapping for UI
+            foreach(static::getUiColumns() as $column_name => $prop){
+                !isset($worker->{$prop}) && $worker->{$prop}= 'NNNN';
+
                 $prop_length = strlen($worker->{$prop});
                 $key = '_max' . ucfirst(strtolower($column_name)) . 'NameLength';
                 static::$$key = max(static::$$key, $prop_length);
@@ -720,7 +722,7 @@ class Worker
 
         //Show last line
         $line_last = str_pad('', static::getSingleLineTotalLength(), '-') . PHP_EOL;
-        $content && static::safeEcho($line_last);
+        !empty($content) && static::safeEcho($line_last);
 
         if (static::$daemonize) {
             static::safeEcho("Input \"php $argv[0] stop\" to stop. Start success.\n\n");
@@ -1179,6 +1181,14 @@ class Worker
     {
         if (static::$_OS !== OS_TYPE_LINUX) {
             return;
+        }
+
+        clearstatcache();
+        $master_pid      = is_file(static::$pidFile) ? file_get_contents(static::$pidFile) : 0;
+        $master_is_alive = $master_pid && posix_kill($master_pid, 0) && posix_getpid() != $master_pid;
+        if ($master_is_alive) {
+            static::log("Workerman already running");
+            exit;
         }
         static::$_masterPid = posix_getpid();
         if (false === file_put_contents(static::$pidFile, static::$_masterPid)) {
